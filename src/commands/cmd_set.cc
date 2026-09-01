@@ -222,7 +222,7 @@ class CommandSRandMember : public Commander {
     }
 
     if (with_count_) {
-      *output = conn->SetOfBulkStrings(members);
+      *output = redis::ArrayOfBulkStrings(members);
     } else {
       *output = members.empty() ? conn->NilString() : redis::BulkString(members.front());
     }

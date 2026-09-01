@@ -298,6 +298,20 @@ func TestProtocolRESP3(t *testing.T) {
 		}
 	})
 
+	t.Run("SRANDMEMBER with count returns an array", func(t *testing.T) {
+		require.NoError(t, c.WriteArgs("SADD", "srandmember-resp3", "member"))
+		c.MustRead(t, ":1")
+
+		require.NoError(t, c.WriteArgs("SRANDMEMBER", "srandmember-resp3-missing", "1"))
+		c.MustRead(t, "*0")
+
+		require.NoError(t, c.WriteArgs("SRANDMEMBER", "srandmember-resp3", "-2"))
+		c.MustRead(t, "*2")
+		for range 2 {
+			c.MustReadBulkString(t, "member")
+		}
+	})
+
 	t.Run("multi bulk strings with null", func(t *testing.T) {
 		require.NoError(t, c.WriteArgs("HSET", "hash", "f1", "v1"))
 		c.MustRead(t, ":1")
