@@ -302,6 +302,12 @@ func TestProtocolRESP3(t *testing.T) {
 		require.NoError(t, c.WriteArgs("SADD", "srandmember-resp3", "member"))
 		c.MustRead(t, ":1")
 
+		require.NoError(t, c.WriteArgs("SRANDMEMBER", "srandmember-resp3"))
+		c.MustReadBulkString(t, "member")
+
+		require.NoError(t, c.WriteArgs("SRANDMEMBER", "srandmember-resp3-missing"))
+		c.MustRead(t, "_")
+
 		require.NoError(t, c.WriteArgs("SRANDMEMBER", "srandmember-resp3-missing", "1"))
 		c.MustRead(t, "*0")
 
